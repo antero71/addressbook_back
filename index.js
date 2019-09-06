@@ -5,30 +5,33 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 
 const generateId = () => {
-  const maxId = notes.length > 0
-    ? Math.max(...notes.map(n => n.id))
+  const maxId = contacts.length > 0
+    ? Math.max(...contacts.map(n => n.id))
     : 0
   return maxId + 1
 }
 
-let notes = [
+let contacts = [
   {
-    id: 1,
-    content: "HTML is easy",
-    date: "2019-05-30T17:30:31.098Z",
-    important: true
+    id:1,
+    name: "add new contact",
+    street: "Koulukatu 4",
+    phone:"040222333",
+    email:"test@gmail.com"
   },
   {
     id: 2,
-    content: "Browser can execute only Javascript",
-    date: "2019-05-30T18:39:34.091Z",
-    important: false
+    name: "Aku Ankka",
+    address: "Ankkalinnantie 33",
+    phone:"050-4453355",
+    email:"aku.ankka@ankkalinna.com"
   },
   {
     id: 3,
-    content: "GET and POST are the most important methods of HTTP protocol",
-    date: "2019-05-30T19:20:14.298Z",
-    important: true
+    name: "Lumikki",
+    address: "Peltotie 47",
+    phone:"0442672333",
+    email:"lumikki22@gmail.com"
   }
 ]
 
@@ -36,28 +39,28 @@ app.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
 })
 
-app.get('/notes', (req, res) => {
-  res.json(notes)
+app.get('/contacts', (req, res) => {
+  res.json(contacts)
 })
 
-app.get('/notes/:id', (request, response) => {
+app.get('/contacts/:id', (request, response) => {
   const id = Number(request.params.id)
-  const note = notes.find(note => note.id === id)
-  if (note) {
-    response.json(note)
+  const contact = contacts.find(contact => contact.id === id)
+  if (contact) {
+    response.json(contact)
   } else {
     response.status(404).end()
   }
 })
 
-app.delete('/notes/:id', (request, response) => {
+app.delete('/contacts/:id', (request, response) => {
   const id = Number(request.params.id)
-  notes = notes.filter(note => note.id !== id)
+  contacts = contacts.filter(contact => contact.id !== id)
 
   response.status(204).end()
 })
 
-app.post('/notes', (request, response) => {
+app.post('/contacts', (request, response) => {
   const body = request.body
 
   if (!body.content) {
@@ -66,16 +69,16 @@ app.post('/notes', (request, response) => {
     })
   }
 
-  const note = {
+  const contact = {
     content: body.content,
     important: body.important || false,
     date: new Date(),
     id: generateId(),
   }
 
-  notes = notes.concat(note)
+  contacts = contacts.concat(contact)
 
-  response.json(note)
+  response.json(contact)
 })
 
 const PORT = 3001
