@@ -63,15 +63,31 @@ app.delete('/contacts/:id', (request, response) => {
 app.post('/contacts', (request, response) => {
   const body = request.body
 
-  if (!body.content) {
+  const name = contacts.find(contact => contact.name === body.name)
+
+  if (name) {
     return response.status(400).json({
-      error: 'content missing'
+      error: 'name is allready in contacts'
+    })
+  }
+
+  if (!body.name) {
+    return response.status(400).json({
+      error: 'name missing'
+    })
+  }
+
+  if (!body.phone && !body.email) {
+    return response.status(400).json({
+      error: 'phone or email is mandatory'
     })
   }
 
   const contact = {
-    content: body.content,
-    important: body.important || false,
+    name: body.name,
+    address: body.address,
+    phone: body.phone,
+    email: body.email,
     date: new Date(),
     id: generateId(),
   }

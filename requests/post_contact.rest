@@ -2,6 +2,7 @@ post http://localhost:3001/contacts HTTP/1.1
 Content-Type: application/json
 
 {
-  "content": "add new contact",
-  "important": "true"
+  "name": "Antero Y",
+  "address": "Jaakontie 4, Helsinki",
+  "email":"antero.test@gmail.com"
 }
