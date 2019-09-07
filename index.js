@@ -1,8 +1,15 @@
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const morgan = require('morgan')
+const cors = require('cors')
 
 app.use(bodyParser.json())
+
+
+app.use(morgan('short'))
+
+app.use(cors())
 
 const generateId = () => {
   const maxId = contacts.length > 0
@@ -63,6 +70,8 @@ app.delete('/contacts/:id', (request, response) => {
 app.post('/contacts', (request, response) => {
   const body = request.body
 
+  
+
   const name = contacts.find(contact => contact.name === body.name)
 
   if (name) {
@@ -97,7 +106,7 @@ app.post('/contacts', (request, response) => {
   response.json(contact)
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
