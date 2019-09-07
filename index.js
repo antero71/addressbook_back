@@ -1,4 +1,6 @@
+require('dotenv').config()
 const express = require('express')
+const Contact = require('./models/contact')
 const app = express()
 const bodyParser = require('body-parser')
 const morgan = require('morgan')
@@ -12,6 +14,17 @@ app.use(morgan('short'))
 
 app.use(cors())
 
+const requestLogger = (request, response, next) => {
+  console.log('Method:', request.method)
+  console.log('Path:  ', request.path)
+  console.log('Body:  ', request.body)
+  console.log('---')
+  next()
+}
+
+app.use(requestLogger)
+
+  
 const generateId = () => {
   const maxId = contacts.length > 0
     ? Math.max(...contacts.map(n => n.id))
@@ -19,48 +32,31 @@ const generateId = () => {
   return maxId + 1
 }
 
-let contacts = [
-  {
-    id:1,
-    name: "add new contact",
-    street: "Koulukatu 4",
-    phone:"040222333",
-    email:"test@gmail.com"
-  },
-  {
-    id: 2,
-    name: "Aku Ankka",
-    address: "Ankkalinnantie 33",
-    phone:"050-4453355",
-    email:"aku.ankka@ankkalinna.com"
-  },
-  {
-    id: 3,
-    name: "Lumikki",
-    address: "Peltotie 47",
-    phone:"0442672333",
-    email:"lumikki22@gmail.com"
-  }
-]
 
-app.get('/api', (req, res) => {
+app.get('/api', (request, response) => {
   res.send('<h1>Hello World!</h1>')
 })
 
-app.get('/contacts', (req, res) => {
+app.get('/api/contacts', (request, response) => {
   Contact.find({}).then(contacts => {
     response.json(contacts)
+  })
+  .catch(error => {
+    console.log(error)
+    response.status(404).end()
   })
 })
 
 app.get('/api/contacts/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const contact = contacts.find(contact => contact.id === id)
-  if (contact) {
-    response.json(contact)
-  } else {
+ // const id = Number(request.params.id)
+  Contact.findById(request.params.id)
+  .then(contact => {
+    response.json(contact.toJSON())
+  })
+  .catch(error => {
+    console.log(error)
     response.status(404).end()
-  }
+  })
 })
 
 app.delete('/api/contacts/:id', (request, response) => {
@@ -73,9 +69,7 @@ app.delete('/api/contacts/:id', (request, response) => {
 app.post('/api/contacts', (request, response) => {
   const body = request.body
 
-  
-
-  const name = contacts.find(contact => contact.name === body.name)
+  const name = Contact.find(contact => contact.name === body.name)
 
   if (name) {
     return response.status(400).json({
@@ -104,20 +98,11 @@ app.post('/api/contacts', (request, response) => {
     id: generateId(),
   }
 
-  contacts = contacts.concat(contact)
-
-  response.json(contact)
+  contact.save().then(savedContact => {
+    response.json(savedContact.toJSON())
+  })
 })
 
-const contactSchema = new mongoose.Schema({
-  name: String,
-  address: String,
-  email: String,
-  phone: String,
-  date: Date
-})
-
-const Contact = mongoose.model('Contact', contactSchema)
 
 
 const PORT = process.env.PORT || 3001
