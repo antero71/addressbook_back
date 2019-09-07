@@ -8,11 +8,12 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 
 app.use(bodyParser.json())
-
-
 app.use(morgan('short'))
 
 app.use(cors())
+
+
+
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -51,11 +52,15 @@ app.get('/api/contacts/:id', (request, response) => {
  // const id = Number(request.params.id)
   Contact.findById(request.params.id)
   .then(contact => {
-    response.json(contact.toJSON())
+    if (contact){
+      response.json(contact.toJSON())
+    } else {
+      response.status(404).end() 
+    }
   })
   .catch(error => {
     console.log(error)
-    response.status(404).end()
+    response.status(400).send({ error: 'malformatted id' })
   })
 })
 
@@ -103,7 +108,12 @@ app.post('/api/contacts', (request, response) => {
   })
 })
 
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
 
+// olemattomien osoitteiden käsittely
+app.use(unknownEndpoint)
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
