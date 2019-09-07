@@ -65,7 +65,10 @@ app.delete('/api/notes/:id', (request, response, next) => {
 app.post('/api/contacts', (request, response) => {
   const body = request.body
 
-  const name = Contact.find(contact => contact.name === body.name)
+  const name = Contact.find({})
+    .then(contact => contact.name === body.name)
+
+  console.log('Find name: ',name)
 
   if (name) {
     return response.status(400).json({
