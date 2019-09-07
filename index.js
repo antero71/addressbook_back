@@ -12,8 +12,7 @@ app.use(morgan('short'))
 
 app.use(cors())
 
-
-
+mongoose.set('useFindAndModify', false)
 
 const requestLogger = (request, response, next) => {
   console.log('Method:', request.method)
@@ -24,15 +23,6 @@ const requestLogger = (request, response, next) => {
 }
 
 app.use(requestLogger)
-
-  
-const generateId = () => {
-  const maxId = contacts.length > 0
-    ? Math.max(...contacts.map(n => n.id))
-    : 0
-  return maxId + 1
-}
-
 
 app.get('/api', (request, response) => {
   res.send('<h1>Hello World!</h1>')
@@ -64,11 +54,12 @@ app.get('/api/contacts/:id', (request, response) => {
   })
 })
 
-app.delete('/api/contacts/:id', (request, response) => {
-  const id = Number(request.params.id)
-  contacts = contacts.filter(contact => contact.id !== id)
-
-  response.status(204).end()
+app.delete('/api/notes/:id', (request, response, next) => {
+  Contact.findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => next(error))
 })
 
 app.post('/api/contacts', (request, response) => {
@@ -106,6 +97,24 @@ app.post('/api/contacts', (request, response) => {
   contact.save().then(savedContact => {
     response.json(savedContact.toJSON())
   })
+})
+
+app.put('/api/contacts/:id', (request, response, next) => {
+  const body = request.body
+
+  const note = {
+    name: body.content,
+    address: body.important,
+    phone: body.phone,
+    email: body.email,
+    date: new Date()
+  }
+
+  Contact.findByIdAndUpdate(request.params.id, note, { new: true })
+    .then(updatedContact => {
+      response.json(updatedContact.toJSON())
+    })
+    .catch(error => next(error))
 })
 
 const unknownEndpoint = (request, response) => {
