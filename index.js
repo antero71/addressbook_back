@@ -42,7 +42,7 @@ let contacts = [
   }
 ]
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.send('<h1>Hello World!</h1>')
 })
 
@@ -50,7 +50,7 @@ app.get('/contacts', (req, res) => {
   res.json(contacts)
 })
 
-app.get('/contacts/:id', (request, response) => {
+app.get('/api/contacts/:id', (request, response) => {
   const id = Number(request.params.id)
   const contact = contacts.find(contact => contact.id === id)
   if (contact) {
@@ -60,14 +60,14 @@ app.get('/contacts/:id', (request, response) => {
   }
 })
 
-app.delete('/contacts/:id', (request, response) => {
+app.delete('/api/contacts/:id', (request, response) => {
   const id = Number(request.params.id)
   contacts = contacts.filter(contact => contact.id !== id)
 
   response.status(204).end()
 })
 
-app.post('/contacts', (request, response) => {
+app.post('/api/contacts', (request, response) => {
   const body = request.body
 
   
