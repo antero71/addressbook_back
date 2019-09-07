@@ -47,7 +47,9 @@ app.get('/api', (req, res) => {
 })
 
 app.get('/contacts', (req, res) => {
-  res.json(contacts)
+  Contact.find({}).then(contacts => {
+    response.json(contacts)
+  })
 })
 
 app.get('/api/contacts/:id', (request, response) => {
@@ -105,6 +107,17 @@ app.post('/api/contacts', (request, response) => {
 
   response.json(contact)
 })
+
+const contactSchema = new mongoose.Schema({
+  name: String,
+  address: String,
+  email: String,
+  phone: String,
+  date: Date
+})
+
+const Contact = mongoose.model('Contact', contactSchema)
+
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
