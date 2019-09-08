@@ -38,15 +38,23 @@ test('contacts are returned as json', async () => {
 test('there are five contacts', async () => {
   const response = await api.get('/api/contacts')
 
-  expect(response.body.length).toBe(2)
+  expect(response.body.length).toBe(initialContacts.length)
 })
 
 test('the first contact is Risto', async () => {
   const response = await api.get('/api/contacts')
 
-  console.log('name ',response.body)
-
   expect(response.body[0].name).toBe('Risto')
+})
+
+test('a specific contact is within the returned contacts', async () => {
+  const response = await api.get('/api/contacts')
+
+  const contents = response.body.map(r => r.name)
+
+  expect(contents).toContain(
+    'Liisa'
+  )
 })
 
 afterAll(() => {
