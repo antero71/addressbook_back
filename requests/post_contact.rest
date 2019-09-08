@@ -1,10 +1,10 @@
-post http://localhost:3001/api/contacts HTTP/1.1
+post https://safe-plateau-98676.herokuapp.com/api/contacts HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOi...
+Authorization: Bearer eyJhbGciOiJIUzI....
 
 {
-  "name": "Tiina Siili",
-  "address": "Siilitie 4, Kauniainen",
-  "email":"tiina@gmail.com",
-  "userId":"5d75111e9b9626e6ee07f4db"
+  "name": "Liisa Hirvi",
+  "address": "Hirvikatu 7 b 34, Espoo",
+  "email":"liisa@gmail.com",
+  "userId":"5d7565ff66055a0004c6f3ac"
 }
