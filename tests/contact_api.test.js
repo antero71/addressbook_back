@@ -4,19 +4,15 @@ const app = require('../app')
 const helper = require('./test_helper')
 const Contact = require('../models/contact')
 
-
 const api = supertest(app)
 
-
-
 beforeEach(async () => {
-  await Contact.deleteMany({})
+  await Note.deleteMany({})
 
-  let contactObject = new Contact(helper.initialContacts[0])
-  await contactObject.save()
-
-  contactObject = new Contact(helper.initialContacts[1])
-  await contactObject.save()
+  for (let contact of helper.initialContacts) {
+    let contactObject = new Contact(contact)
+    await contactObject.save()
+  }
 })
 
 
@@ -31,12 +27,6 @@ test('all contact are returned', async () => {
   const response = await api.get('/api/contacts')
 
   expect(response.body.length).toBe(helper.initialContacts.length)
-})
-
-test('the first contact is Risto', async () => {
-  const response = await api.get('/api/contacts')
-
-  expect(response.body[0].name).toBe('Risto')
 })
 
 test('a specific contact is within the returned contacts', async () => {

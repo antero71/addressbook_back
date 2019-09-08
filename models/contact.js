@@ -10,7 +10,11 @@ const contactSchema = new mongoose.Schema({
   address: String,
   email: String,
   phone: String,
-  date: Date
+  date: Date,
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 })
 
 contactSchema.set('toJSON', {
