@@ -2,14 +2,7 @@ const contactsRouter = require('express').Router()
 const Contact = require('../models/contact')
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
-
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    return authorization.substring(7)
-  }
-    return null
-  }
+const getTokenFrom = require('../utils/token_validation')
 
   contactsRouter.get('/', async (request, response) => {
 
