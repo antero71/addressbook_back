@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt')
 const usersRouter = require('express').Router()
 const User = require('../models/user')
 const getTokenFrom = require('../utils/token_validation')
+const jwt = require('jsonwebtoken')
 
 usersRouter.post('/', async (request, response, next) => {
   try {
