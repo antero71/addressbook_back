@@ -4,7 +4,7 @@ const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 const getTokenFrom = require('../utils/token_validation')
 
-  contactsRouter.get('/', async (request, response) => {
+  contactsRouter.get('/', async (request, response, next) => {
 
     const token = getTokenFrom(request)
 
