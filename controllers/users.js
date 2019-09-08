@@ -25,6 +25,7 @@ usersRouter.post('/', async (request, response, next) => {
 
 usersRouter.get('/', async (request, response) => {
   const users = await User.find({})
+    .populate('contacts', { name: 1, address: 1, email: 1, phone: 1, date: 1 })
   response.json(users.map(u => u.toJSON()))
 })
 
