@@ -19,8 +19,11 @@ Content-Type: application/json
   "password": "samplexyzkljjh19A"
 }
 ```
+Samalla `username`:llä ei voi lisätä kahta tai useampaa käyttäjää.
+
 
 ## Käyttäjän kirjautuminen
+
 ```
 post https://safe-plateau-98676.herokuapp.com/api/login
 Content-Type: application/json
@@ -41,7 +44,7 @@ Muutoin paluusanomassa tulee käyttäjälle generoitu jwt token, jota joissakin 
 
 ## Yhteystiedon lisääminen
 ```
-`post http://localhost:3001/api/contacts HTTP/1.1
+post http://localhost:3001/api/contacts HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOi...
 
