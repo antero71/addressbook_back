@@ -1,33 +1,24 @@
 const mongoose = require('mongoose')
 
-const url = process.env.MONGODB_URI
+const contactSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    minlength: 3,
+    maxlength: 50,
+    required: true
+  },
+  address: String,
+  email: String,
+  phone: String,
+  date: Date
+})
 
-console.log('connecting to', url)
+contactSchema.set('toJSON', {
+  transform: (document, returnedObject) => {
+    returnedObject.id = returnedObject._id.toString()
+    delete returnedObject._id
+    delete returnedObject.__v
+  }
+})
 
-mongoose.connect(url, { useNewUrlParser: true })
-  .then(result => {
-    console.log('connected to MongoDB')
-  })
-  .catch((error) => {
-    console.log('error connecting to MongoDB:', error.message)
-  })
-
-
-
-  const contactSchema = new mongoose.Schema({
-    name: String,
-    address: String,
-    email: String,
-    phone: String,
-    date: Date
-  })
-
-  contactSchema.set('toJSON', {
-    transform: (document, returnedObject) => {
-      returnedObject.id = returnedObject._id.toString()
-      delete returnedObject._id
-      delete returnedObject.__v
-    }
-  })
-  
-  module.exports = mongoose.model('Contact', contactSchema)
+module.exports = mongoose.model('Contact', contactSchema)
