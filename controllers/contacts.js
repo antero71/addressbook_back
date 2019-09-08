@@ -6,19 +6,20 @@ contactsRouter.get('/', async (request, response) => {
   response.json(contacts.map(contact => contact.toJSON()))
 })
 
-contactsRouter.get('/:id', (request, response, next) => {
-  Contact.findById(request.params.id)
-    .then(contact => {
-      if (contact) {
-        response.json(contact.toJSON())
-      } else {
-        response.status(404).end()
-      }
-    })
-    .catch(error => next(error))
+contactsRouter.get('/:id', async (request, response, next) => {
+  try{
+    const contact = await Contact.findById(request.params.id)
+    if (contact) {
+      response.json(contact.toJSON())
+    } else {
+      response.status(404).end()
+    }
+  } catch(exception){
+    next(exception)
+  }
 })
 
-contactsRouter.post('/', (request, response, next) => {
+contactsRouter.post('/', async (request, response, next) => {
   const body = request.body
 
   const contact = new Contact({
@@ -29,22 +30,24 @@ contactsRouter.post('/', (request, response, next) => {
     date: new Date(),
   })
 
-  contact.save()
-    .then(savedContact => {
-      response.json(savedContact.toJSON())
-    })
-    .catch(error => next(error))
+  try{
+    const savedContact = await contact.save()
+    response.json(savedContact.toJSON())
+  }catch(exception){
+    next(exception)
+  }
 })
 
-contactsRouter.delete('/:id', (request, response, next) => {
-  Contact.findByIdAndRemove(request.params.id)
-    .then(() => {
-      response.status(204).end()
-    })
-    .catch(error => next(error))
+contactsRouter.delete('/:id', async (request, response, next) => {
+  try{
+    await Contact.findByIdAndRemove(request.params.id)
+    response.status(204).end()
+  }catch(exception){
+    next(exception)
+  }
 })
 
-contactsRouter.put('/:id', (request, response, next) => {
+contactsRouter.put('/:id', async (request, response, next) => {
   const body = request.body
 
   const contact = new Contact({
@@ -55,11 +58,12 @@ contactsRouter.put('/:id', (request, response, next) => {
     date: new Date(),
   })
 
-  Contact.findByIdAndUpdate(request.params.id, contact, { new: true })
-    .then(updatedContact => {
-      response.json(updatedContact.toJSON())
-    })
-    .catch(error => next(error))
+  try{
+    const updatedContact = await Contact.findByIdAndUpdate(request.params.id, contact, { new: true })
+    response.json(updatedContact.toJSON())
+  }catch(exception){
+    next(exception)
+  }
 })
 
 module.exports = contactsRouter
