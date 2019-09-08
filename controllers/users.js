@@ -24,7 +24,7 @@ usersRouter.post('/', async (request, response, next) => {
   }
 })
 
-usersRouter.get('/', async (request, response) => {
+usersRouter.get('/', async (request, response, next) => {
   const token = getTokenFrom(request)
 
   try{
