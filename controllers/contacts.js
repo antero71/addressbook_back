@@ -1,6 +1,15 @@
 const contactsRouter = require('express').Router()
 const Contact = require('../models/contact')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7)
+  }
+  return null
+}
 
 contactsRouter.get('/', async (request, response) => {
   const contacts = await Contact
@@ -25,18 +34,27 @@ contactsRouter.get('/:id', async (request, response, next) => {
 contactsRouter.post('/', async (request, response, next) => {
   const body = request.body
 
-  const user = await User.findById(body.userId)
+  const token = getTokenFrom(request)
 
-  const contact = new Contact({
-    name: body.name,
-    address: body.address,
-    phone: body.phone,
-    email: body.email,
-    date: new Date(),
-    user: user._id
-  })
+  try {
+    const decodedToken = jwt.verify(token, process.env.SECRET)
 
-  try{
+    if (!token || !decodedToken.id) {
+      return response.status(401).json({ error: 'token missing or invalid' })
+    }
+
+    const user = await User.findById(body.userId)
+
+    const contact = new Contact({
+      name: body.name,
+      address: body.address,
+      phone: body.phone,
+      email: body.email,
+      date: new Date(),
+      user: user._id
+    })
+
+  
     const savedContact = await contact.save()
     user.contacts = user.contacts.concat(savedContact._id)
     await user.save()

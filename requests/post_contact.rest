@@ -1,9 +1,10 @@
 post http://localhost:3001/api/contacts HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOi...
 
 {
-  "name": "Pekka Orava",
-  "address": "Kuusi 4, Joensuu",
-  "email":"pekka@gmail.com",
+  "name": "Tiina Siili",
+  "address": "Siilitie 4, Kauniainen",
+  "email":"tiina@gmail.com",
   "userId":"5d75111e9b9626e6ee07f4db"
 }
