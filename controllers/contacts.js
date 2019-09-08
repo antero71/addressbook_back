@@ -1,10 +1,9 @@
 const contactsRouter = require('express').Router()
 const Contact = require('../models/contact')
 
-contactsRouter.get('/', (request, response) => {
-  Contact.find({}).then(contacts => {
-    response.json(contacts.map(contact => contact.toJSON()))
-  })
+contactsRouter.get('/', async (request, response) => {
+  const contacts = await Contact.find({})
+  response.json(contacts.map(contact => contact.toJSON()))
 })
 
 contactsRouter.get('/:id', (request, response, next) => {
@@ -48,10 +47,13 @@ contactsRouter.delete('/:id', (request, response, next) => {
 contactsRouter.put('/:id', (request, response, next) => {
   const body = request.body
 
-  const contact = {
-    content: body.content,
-    important: body.important,
-  }
+  const contact = new Contact({
+    name: body.name,
+    address: body.address,
+    phone: body.phone,
+    email: body.email,
+    date: new Date(),
+  })
 
   Contact.findByIdAndUpdate(request.params.id, contact, { new: true })
     .then(updatedContact => {
