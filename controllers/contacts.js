@@ -8,18 +8,40 @@ const getTokenFrom = request => {
   if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
     return authorization.substring(7)
   }
-  return null
-}
+    return null
+  }
 
-contactsRouter.get('/', async (request, response) => {
-  const contacts = await Contact
-    .find({}).populate('User', { username: 1, name: 1 })
+  contactsRouter.get('/', async (request, response) => {
 
-  response.json(contacts.map(contact => contact.toJSON()))
+    const token = getTokenFrom(request)
+
+    try {
+      const decodedToken = jwt.verify(token, process.env.SECRET)
+
+      if (!token || !decodedToken.id) {
+        return response.status(401).json({ error: 'token missing or invalid' })
+      }
+
+      const contacts = await Contact
+        .find({}).populate('User', { username: 1, name: 1 })
+
+      response.json(contacts.map(contact => contact.toJSON()))
+    }catch(exception){
+      next(exception)
+    }
 })
 
 contactsRouter.get('/:id', async (request, response, next) => {
+
+  const token = getTokenFrom(request)
+
   try{
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+
+    if (!token || !decodedToken.id) {
+      return response.status(401).json({ error: 'token missing or invalid' })
+    }
+
     const contact = await Contact.findById(request.params.id)
     if (contact) {
       response.json(contact.toJSON())
