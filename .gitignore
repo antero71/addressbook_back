@@ -26,4 +26,5 @@ hs_err_pid*
 node_modules
 .env
 **/add_user.rest
-
+**/get_all_contacts.rest
+**/list_users.rest
