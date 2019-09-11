@@ -8,7 +8,7 @@
     "watch": "cross-env NODE_ENV=development nodemon index.js",
     "lint": "eslint .",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand --detectOpenHandles",
-    "build:ui": "rm -rf build && cd ../addressbook_front && npm run build --prod && cp -r build ../../addressbook_back",
+    "build:ui": "rm -rf build && cd ../addressbook_front/addressbook && npm run build --prod && cp -r build ../../addressbook_back",
     "deploy": "git push heroku master",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",    
     "logs:prod": "heroku logs --tail"
