@@ -3,7 +3,7 @@ Yhteystietosovelluksen back-end osuus.
 
 ## Käytetetyt lähteet
 
-Käytin sovelluksen kehityskessä Helsingin Yliopiston fullstack kurssin materiaalista. Kurssi löytyy osoitteesta https://fullstackopen.com/
+Sovellus on kehitetty pitkälti ottaen mallia Helsingin Ylipiston fullstack kurssin materiaalista. Kurssi löytyy osoitteesta https://fullstackopen.com/
 
 # API rajapinnat
 
@@ -20,7 +20,7 @@ Content-Type: application/json
 }
 ```
 Samalla `username`:llä ei voi lisätä kahta tai useampaa käyttäjää.
-
+ 
 
 ## Käyttäjän kirjautuminen
 
@@ -40,15 +40,7 @@ Jos kirjautumistiedot ovat väärin tai käyttäjää ei löydy, annetaan virhei
   "error": "invalid username or password"
 }
 ```
-Muutoin paluusanomassa tulee käyttäjälle generoitu jwt token, jota joissakin rajapinnoissa käytetään käyttäjän tunnistukseen.
-
-## Käyttäjälistaus
-
-```
-get  https://safe-plateau-98676.herokuapp.com/api/users
-Authorization: Bearer eyJhbGciOi...
-Content-Type: application/json
-```
+Muutoin paluusanomassa tulee käyttäjälle generoitu jwt token, jota joissakin rajapinnooissa käytetään käyttäjän tunnistukseen.
 
 ## Yhteystiedon lisääminen
 ```
@@ -68,7 +60,6 @@ userId kentän sisältö pitää olla sen käyttäjän id, joka on lisäämäss�
 
 ## Puutteita ja kehityskohteita
 
-- yhteystiedon lisääminen ei toimi webbikäyttöliittymästä. 
 - Yhteystietolistasta ei pääse linkillä tarkempiin tietoihin, vaan koko yhteystiedon
 asiasisältö on listassa mukana.
 - Testit pitää korjata.
@@ -76,4 +67,4 @@ asiasisältö on listassa mukana.
 - express-jwt token kirjaston käyttöönotto
 - uhkamallinnus on tekemättä.
 - - uhkamallinnuksessa havaitut uhat pitää arvioida ja tarvittaessa korjata.
-
+- 
