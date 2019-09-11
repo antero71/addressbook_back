@@ -1,2 +1,3 @@
 get  https://safe-plateau-98676.herokuapp.com/api/contacts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsI...
 

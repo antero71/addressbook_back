@@ -1,5 +1,5 @@
 
 
 get  https://safe-plateau-98676.herokuapp.com/api/users
-Authorization: Bearer eyJNiyJ1c2Vy....
+Authorization: Bearer eyJhbGciOiJIUzI1N...
 Content-Type: application/json

@@ -58,7 +58,11 @@ contactsRouter.post('/', async (request, response, next) => {
       return response.status(401).json({ error: 'token missing or invalid' })
     }
 
-    const user = await User.findById(body.userId)
+    console.log('tokenId:', decodedToken.id)
+
+    const user = await User.findById(decodedToken.id)
+
+    console.log('user: ',user)
 
     const contact = new Contact({
       name: body.name,
