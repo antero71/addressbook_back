@@ -1,7 +1,0 @@
-post https://safe-plateau-98676.herokuapp.com/api/login
-Content-Type: application/json
-
-{
-  "username": "aoikkonen",
-  "password": ""
-}
