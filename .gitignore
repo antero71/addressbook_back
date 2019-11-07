@@ -28,3 +28,4 @@ node_modules
 **/add_user.rest
 **/get_all_contacts.rest
 **/list_users.rest
+**/login.rest
